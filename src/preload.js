@@ -1,0 +1,8 @@
+// preload.js
+// Secure bridge between renderer and main process
+
+const { contextBridge, ipcRenderer } = require("electron");
+
+contextBridge.exposeInMainWorld("warRoomAPI", {
+	getData: () => ipcRenderer.invoke("get-data"),
+});

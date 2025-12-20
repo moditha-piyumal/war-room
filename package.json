@@ -1,0 +1,12 @@
+{
+	"name": "war-room",
+	"version": "0.1.0",
+	"description": "WAR ROOM - Offline-first mission & task command app",
+	"main": "src/main.js",
+	"scripts": {
+		"start": "electron ."
+	},
+	"devDependencies": {
+		"electron": "36.2.0"
+	}
+}
