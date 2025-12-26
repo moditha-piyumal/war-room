@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 
 const path = require("path");
-const { readData } = require("./storage/jsonStore");
+const { readData, writeData } = require("./storage/jsonStore");
 
 let mainWindow;
 
@@ -22,6 +22,11 @@ function createWindow() {
 }
 ipcMain.handle("get-data", () => {
 	return readData();
+});
+
+ipcMain.handle("save-data", (_event, data) => {
+	writeData(data);
+	return true;
 });
 
 app.whenReady().then(createWindow);
