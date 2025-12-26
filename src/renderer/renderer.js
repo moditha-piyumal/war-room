@@ -177,8 +177,7 @@ function renderTasks() {
 		// Mission row
 		const missionLi = document.createElement("li");
 		missionLi.textContent = `Mission: ${mission.title}`;
-		missionLi.style.fontWeight = "bold";
-		missionLi.style.opacity = "0.85";
+		missionLi.classList.add("mission-item");
 		list.appendChild(missionLi);
 
 		// Tasks belonging to this mission
@@ -192,6 +191,7 @@ function renderTasks() {
 
 		missionTasks.forEach((task) => {
 			const li = document.createElement("li");
+			li.classList.add("task-item", "task-under-mission");
 
 			const checkbox = document.createElement("input");
 			checkbox.type = "checkbox";
@@ -227,6 +227,7 @@ function renderTasks() {
 
 	standaloneTasks.forEach((task) => {
 		const li = document.createElement("li");
+		li.classList.add("task-item");
 
 		const checkbox = document.createElement("input");
 		checkbox.type = "checkbox";

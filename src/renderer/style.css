@@ -4,3 +4,39 @@ body {
     font-family: system-ui, sans-serif;
     padding: 20px;
 }
+
+/* ================================
+   STEP F.3 — Visual Grouping
+   ================================ */
+
+/* Mission header row */
+.mission-item {
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+/* Base task row */
+.task-item {
+    margin: 4px 0;
+}
+
+/* Tasks that belong to a mission */
+.task-under-mission {
+    margin-left: 24px;
+    /* Visual indentation */
+    position: relative;
+}
+
+/* Optional subtle guide line (tree hint, no lines yet) */
+.task-under-mission::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background-color: #999;
+    opacity: 0.4;
+}
