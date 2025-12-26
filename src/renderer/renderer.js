@@ -158,78 +158,65 @@ function createMissionDropdown(task) {
 
 	return select;
 }
-// Renders the task list with missions as contextual items
-function renderTasks() {
-	console.log(
-		"[renderTasks] Rendering tasks with mission grouping (Option B)..."
-	);
 
-	const list = document.getElementById("task-list");
-	if (!list) {
-		console.warn("[renderTasks] task-list element not found!");
-		return;
+function createTaskPill(task) {
+	const checkbox = document.createElement("input");
+	checkbox.type = "checkbox";
+	checkbox.checked = task.isDone;
+	checkbox.onchange = () => toggleTask(task.id);
+
+	const span = document.createElement("span");
+	span.textContent = task.title;
+
+	if (task.isDone) {
+		span.style.textDecoration = "line-through";
 	}
 
-	list.innerHTML = "";
+	const dropdown = createMissionDropdown(task);
 
-	// 1️⃣ Render each mission, then its tasks
-	appData.missions.forEach((mission) => {
-		// Mission row
-		const missionLi = document.createElement("li");
-		missionLi.classList.add("mission-item");
+	const pill = document.createElement("div");
+	pill.classList.add("pill", "task-pill");
 
-		const missionPill = document.createElement("div");
-		missionPill.classList.add("pill", "mission-pill");
-		missionPill.textContent = `Mission: ${mission.title}`;
+	if (task.isDone) {
+		pill.classList.add("completed");
+	}
 
-		missionLi.appendChild(missionPill);
-		list.appendChild(missionLi);
+	pill.appendChild(checkbox);
+	pill.appendChild(span);
+	pill.appendChild(dropdown);
 
-		// Tasks belonging to this mission
-		const missionTasks = appData.tasks.filter(
-			(task) => task.missionId === mission.id
-		);
+	return pill;
+}
+function renderMission(mission, list) {
+	const missionLi = document.createElement("li");
+	missionLi.classList.add("mission-item");
 
-		console.log(
-			`[renderTasks] Mission "${mission.title}" has ${missionTasks.length} tasks`
-		);
+	const missionPill = document.createElement("div");
+	missionPill.classList.add("pill", "mission-pill");
+	missionPill.textContent = `Mission: ${mission.title}`;
 
-		missionTasks.forEach((task) => {
-			const li = document.createElement("li");
-			li.classList.add("task-item", "task-under-mission");
+	missionLi.appendChild(missionPill);
+	list.appendChild(missionLi);
 
-			const checkbox = document.createElement("input");
-			checkbox.type = "checkbox";
-			checkbox.checked = task.isDone;
-			checkbox.onchange = () => toggleTask(task.id);
+	const missionTasks = appData.tasks.filter(
+		(task) => task.missionId === mission.id
+	);
 
-			const span = document.createElement("span");
-			span.textContent = task.title;
+	console.log(
+		`[renderTasks] Mission "${mission.title}" has ${missionTasks.length} tasks`
+	);
 
-			if (task.isDone) {
-				span.style.textDecoration = "line-through";
-			}
+	missionTasks.forEach((task) => {
+		const li = document.createElement("li");
+		li.classList.add("task-item", "task-under-mission");
 
-			const dropdown = createMissionDropdown(task);
+		const pill = createTaskPill(task);
+		li.appendChild(pill);
 
-			const pill = document.createElement("div");
-			pill.classList.add("pill", "task-pill");
-
-			if (task.isDone) {
-				pill.classList.add("completed");
-			}
-
-			pill.appendChild(checkbox);
-			pill.appendChild(span);
-			pill.appendChild(dropdown);
-
-			li.appendChild(pill);
-
-			list.appendChild(li);
-		});
+		list.appendChild(li);
 	});
-
-	// 2️⃣ Render standalone tasks (no mission)
+}
+function renderStandaloneTasks(list) {
 	const standaloneTasks = appData.tasks.filter(
 		(task) => task.missionId === null
 	);
@@ -243,35 +230,34 @@ function renderTasks() {
 		const li = document.createElement("li");
 		li.classList.add("task-item");
 
-		const checkbox = document.createElement("input");
-		checkbox.type = "checkbox";
-		checkbox.checked = task.isDone;
-		checkbox.onchange = () => toggleTask(task.id);
-
-		const span = document.createElement("span");
-		span.textContent = task.title;
-
-		if (task.isDone) {
-			span.style.textDecoration = "line-through";
-		}
-
-		const dropdown = createMissionDropdown(task);
-
-		const pill = document.createElement("div");
-		pill.classList.add("pill", "task-pill");
-
-		if (task.isDone) {
-			pill.classList.add("completed");
-		}
-
-		pill.appendChild(checkbox);
-		pill.appendChild(span);
-		pill.appendChild(dropdown);
-
+		const pill = createTaskPill(task);
 		li.appendChild(pill);
 
 		list.appendChild(li);
 	});
+}
+
+// Renders the task list with missions as contextual items
+function renderTasks() {
+	console.log(
+		"[renderTasks] Rendering tasks with mission grouping (refactored)..."
+	);
+
+	const list = document.getElementById("task-list");
+	if (!list) {
+		console.warn("[renderTasks] task-list element not found!");
+		return;
+	}
+
+	list.innerHTML = "";
+
+	// Render missions and their tasks
+	appData.missions.forEach((mission) => {
+		renderMission(mission, list);
+	});
+
+	// Render standalone tasks
+	renderStandaloneTasks(list);
 
 	console.log(
 		"[renderTasks] Render complete.",
