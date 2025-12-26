@@ -160,7 +160,9 @@ function createMissionDropdown(task) {
 }
 // Renders the task list with missions as contextual items
 function renderTasks() {
-	console.log("[renderTasks] Rendering task list (with missions)...");
+	console.log(
+		"[renderTasks] Rendering tasks with mission grouping (Option B)..."
+	);
 
 	const list = document.getElementById("task-list");
 	if (!list) {
@@ -170,25 +172,60 @@ function renderTasks() {
 
 	list.innerHTML = "";
 
-	// 1️⃣ Render Missions (as contextual task-like items)
+	// 1️⃣ Render each mission, then its tasks
 	appData.missions.forEach((mission) => {
-		const li = document.createElement("li");
+		// Mission row
+		const missionLi = document.createElement("li");
+		missionLi.textContent = `Mission: ${mission.title}`;
+		missionLi.style.fontWeight = "bold";
+		missionLi.style.opacity = "0.85";
+		list.appendChild(missionLi);
 
-		li.textContent = `Mission: ${mission.title}`;
+		// Tasks belonging to this mission
+		const missionTasks = appData.tasks.filter(
+			(task) => task.missionId === mission.id
+		);
 
-		// Temporary visual distinction (pill styling comes later)
-		li.style.fontWeight = "bold";
-		li.style.opacity = "0.85";
+		console.log(
+			`[renderTasks] Mission "${mission.title}" has ${missionTasks.length} tasks`
+		);
 
-		list.appendChild(li);
+		missionTasks.forEach((task) => {
+			const li = document.createElement("li");
+
+			const checkbox = document.createElement("input");
+			checkbox.type = "checkbox";
+			checkbox.checked = task.isDone;
+			checkbox.onchange = () => toggleTask(task.id);
+
+			const span = document.createElement("span");
+			span.textContent = task.title;
+
+			if (task.isDone) {
+				span.style.textDecoration = "line-through";
+			}
+
+			const dropdown = createMissionDropdown(task);
+
+			li.appendChild(checkbox);
+			li.appendChild(span);
+			li.appendChild(dropdown);
+
+			list.appendChild(li);
+		});
 	});
 
-	// 2️⃣ Render ALL tasks (standalone + assigned)
-	// In Step F.3 we will group assigned tasks under missions.
-	// For now, we just keep them visible so nothing "disappears".
-	console.log("[renderTasks] Rendering ALL tasks (including assigned ones)...");
+	// 2️⃣ Render standalone tasks (no mission)
+	const standaloneTasks = appData.tasks.filter(
+		(task) => task.missionId === null
+	);
 
-	appData.tasks.forEach((task) => {
+	console.log(
+		"[renderTasks] Rendering standalone tasks:",
+		standaloneTasks.length
+	);
+
+	standaloneTasks.forEach((task) => {
 		const li = document.createElement("li");
 
 		const checkbox = document.createElement("input");
@@ -203,27 +240,10 @@ function renderTasks() {
 			span.style.textDecoration = "line-through";
 		}
 
-		// Show current mission name (for debugging + clarity)
-		const missionLabel = document.createElement("span");
-		missionLabel.style.marginLeft = "10px";
-		missionLabel.style.opacity = "0.7";
-		missionLabel.style.fontSize = "0.9em";
-
-		if (task.missionId) {
-			const mission = appData.missions.find((m) => m.id === task.missionId);
-			missionLabel.textContent = mission
-				? `(in: ${mission.title})`
-				: "(in: Unknown mission)";
-		} else {
-			missionLabel.textContent = "(no mission)";
-		}
-
-		// Mission assignment dropdown (Step F.2 feature)
 		const dropdown = createMissionDropdown(task);
 
 		li.appendChild(checkbox);
 		li.appendChild(span);
-		li.appendChild(missionLabel);
 		li.appendChild(dropdown);
 
 		list.appendChild(li);
