@@ -176,8 +176,13 @@ function renderTasks() {
 	appData.missions.forEach((mission) => {
 		// Mission row
 		const missionLi = document.createElement("li");
-		missionLi.textContent = `Mission: ${mission.title}`;
 		missionLi.classList.add("mission-item");
+
+		const missionPill = document.createElement("div");
+		missionPill.classList.add("pill", "mission-pill");
+		missionPill.textContent = `Mission: ${mission.title}`;
+
+		missionLi.appendChild(missionPill);
 		list.appendChild(missionLi);
 
 		// Tasks belonging to this mission
@@ -207,9 +212,18 @@ function renderTasks() {
 
 			const dropdown = createMissionDropdown(task);
 
-			li.appendChild(checkbox);
-			li.appendChild(span);
-			li.appendChild(dropdown);
+			const pill = document.createElement("div");
+			pill.classList.add("pill", "task-pill");
+
+			if (task.isDone) {
+				pill.classList.add("completed");
+			}
+
+			pill.appendChild(checkbox);
+			pill.appendChild(span);
+			pill.appendChild(dropdown);
+
+			li.appendChild(pill);
 
 			list.appendChild(li);
 		});
@@ -243,9 +257,18 @@ function renderTasks() {
 
 		const dropdown = createMissionDropdown(task);
 
-		li.appendChild(checkbox);
-		li.appendChild(span);
-		li.appendChild(dropdown);
+		const pill = document.createElement("div");
+		pill.classList.add("pill", "task-pill");
+
+		if (task.isDone) {
+			pill.classList.add("completed");
+		}
+
+		pill.appendChild(checkbox);
+		pill.appendChild(span);
+		pill.appendChild(dropdown);
+
+		li.appendChild(pill);
 
 		list.appendChild(li);
 	});

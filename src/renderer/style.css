@@ -40,3 +40,65 @@ body {
     background-color: #999;
     opacity: 0.4;
 }
+
+/* ================================
+   STEP F.4 — Pill UI (Blue Theme)
+   ================================ */
+
+/* Base pill */
+.pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 14px;
+    border-radius: 999px;
+
+    font-size: 14px;
+    line-height: 1.2;
+
+    transition: background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+/* Task pills — primary */
+.task-pill {
+    background-color: #e6f0ff;
+    /* soft blue */
+    color: #102a43;
+
+    box-shadow: inset 0 0 0 1px #b6d4fe;
+}
+
+/* Hover effect (subtle) */
+.task-pill:hover {
+    background-color: #dbeafe;
+}
+
+/* Mission pills — muted */
+.mission-pill {
+    background-color: #f1f5f9;
+    /* blue-gray */
+    color: #334155;
+
+    box-shadow: inset 0 0 0 1px #cbd5e1;
+}
+
+/* Checkbox styling alignment */
+.pill input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Completed task styling */
+.task-pill span {
+    flex-grow: 1;
+}
+
+.task-pill.completed {
+    opacity: 0.6;
+}
+
+/* Dropdown alignment */
+.pill select {
+    margin-left: auto;
+}
