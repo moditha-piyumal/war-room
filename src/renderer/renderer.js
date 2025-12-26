@@ -1,23 +1,20 @@
 /****************************************************
  * WAR ROOM — Renderer Process
  * ----------------------------------
- * This file controls:
- * - UI state (tasks, missions, settings)
- * - User interactions
- * - Rendering logic
+ * Responsibilities:
+ * - Own in-memory application state
+ * - Handle user interactions
+ * - Render Tasks and Missions
  *
- * IMPORTANT:
- * - Renderer owns in-memory state
- * - Main process owns persistence only
+ * Design Philosophy:
+ * - Tasks are primary
+ * - Missions are contextual items inside the task list
  ****************************************************/
 
 console.log("WAR ROOM renderer ready");
 
 /****************************************************
  * SECTION 1 — APPLICATION STATE (Renderer-owned)
- * ----------------------------------
- * This is the single source of truth for UI state.
- * It is loaded once from disk and mutated in memory.
  ****************************************************/
 
 let appData = {
@@ -28,69 +25,124 @@ let appData = {
 
 /****************************************************
  * SECTION 2 — DATA LOADING & PERSISTENCE (IPC)
- * ----------------------------------
- * These functions communicate with the main process
- * to load and save data safely.
  ****************************************************/
 
-// Load initial data from main process (JSON storage)
 async function loadData() {
+	console.log("[loadData] Requesting data from main process...");
 	appData = await window.warRoomAPI.getData();
+
+	console.log("[loadData] Data received:", appData);
 	renderTasks();
 }
 
-// Persist current in-memory state to disk
 async function persist() {
-	await window.warRoomAPI.saveData(appData);
+	console.log("[persist] Saving appData to disk...", appData);
+	const result = await window.warRoomAPI.saveData(appData);
+	console.log("[persist] Save completed. Result:", result);
 }
 
 /****************************************************
- * SECTION 3 — TASK MUTATION LOGIC
- * ----------------------------------
- * Functions here MODIFY appData.
- * They never touch the DOM directly.
+ * SECTION 3 — MISSION MUTATION LOGIC
  ****************************************************/
 
-// Create and add a new standalone task
+function addMission(title) {
+	console.log("[addMission] Creating mission:", title);
+
+	const newMission = {
+		id: crypto.randomUUID(),
+		title,
+		isManuallyCompleted: false, // Step G
+		createdAt: Date.now(),
+		updatedAt: Date.now(),
+	};
+
+	appData.missions.push(newMission);
+
+	console.log(
+		"[addMission] Mission added. Total missions:",
+		appData.missions.length
+	);
+
+	persist();
+	renderTasks();
+}
+
+/****************************************************
+ * SECTION 4 — TASK MUTATION LOGIC
+ ****************************************************/
+
 function addTask(title) {
+	console.log("[addTask] Creating task:", title);
+
 	const newTask = {
 		id: crypto.randomUUID(),
 		title,
 		isDone: false,
-		missionId: null, // Missions come later
+		missionId: null, // Step F.2
 		createdAt: Date.now(),
 		updatedAt: Date.now(),
 	};
 
 	appData.tasks.push(newTask);
+
+	console.log("[addTask] Task added. Total tasks:", appData.tasks.length);
+
 	persist();
 	renderTasks();
 }
 
-// Toggle completion state of a task
 function toggleTask(id) {
+	console.log("[toggleTask] Toggling task id:", id);
+
 	const task = appData.tasks.find((t) => t.id === id);
-	if (!task) return;
+	if (!task) {
+		console.warn("[toggleTask] Task not found:", id);
+		return;
+	}
 
 	task.isDone = !task.isDone;
 	task.updatedAt = Date.now();
+
+	console.log("[toggleTask] Updated task:", task);
 
 	persist();
 	renderTasks();
 }
 
 /****************************************************
- * SECTION 4 — RENDERING LOGIC (DOM Updates)
- * ----------------------------------
- * These functions READ from appData
- * and update the UI accordingly.
+ * SECTION 5 — RENDERING LOGIC (Tasks + Missions)
  ****************************************************/
 
 function renderTasks() {
+	console.log("[renderTasks] Rendering task list (with missions)...");
+
 	const list = document.getElementById("task-list");
+	if (!list) {
+		console.warn("[renderTasks] task-list element not found!");
+		return;
+	}
+
 	list.innerHTML = "";
 
-	appData.tasks.forEach((task) => {
+	// 1️⃣ Render Missions (as contextual task-like items)
+	appData.missions.forEach((mission) => {
+		const li = document.createElement("li");
+
+		li.textContent = `Mission: ${mission.title}`;
+
+		// Temporary visual distinction (pill styling comes later)
+		li.style.fontWeight = "bold";
+		li.style.opacity = "0.85";
+
+		list.appendChild(li);
+	});
+
+	// 2️⃣ Render standalone tasks (not assigned to a mission)
+	const standaloneTasks = appData.tasks.filter(
+		(task) => task.missionId === null
+	);
+
+	standaloneTasks.forEach((task) => {
 		const li = document.createElement("li");
 
 		const checkbox = document.createElement("input");
@@ -109,31 +161,54 @@ function renderTasks() {
 		li.appendChild(span);
 		list.appendChild(li);
 	});
+
+	console.log(
+		"[renderTasks] Render complete.",
+		"Missions:",
+		appData.missions.length,
+		"Standalone tasks:",
+		standaloneTasks.length
+	);
 }
 
 /****************************************************
- * SECTION 5 — EVENT BINDINGS (User Input)
- * ----------------------------------
- * This section connects UI controls
- * to mutation functions.
+ * SECTION 6 — EVENT BINDINGS (User Input)
  ****************************************************/
 
 document.addEventListener("DOMContentLoaded", () => {
-	const input = document.getElementById("task-input");
-	const btn = document.getElementById("add-btn");
+	console.log("[DOM] DOMContentLoaded — wiring UI events");
 
-	btn.onclick = () => {
-		if (!input.value.trim()) return;
+	// Task controls
+	const taskInput = document.getElementById("task-input");
+	const taskBtn = document.getElementById("add-btn");
 
-		addTask(input.value.trim());
-		input.value = "";
+	taskBtn.onclick = () => {
+		const value = taskInput.value.trim();
+		console.log("[UI] Add Task clicked:", value);
+
+		if (!value) return;
+
+		addTask(value);
+		taskInput.value = "";
+	};
+
+	// Mission controls
+	const missionInput = document.getElementById("mission-input");
+	const missionBtn = document.getElementById("add-mission-btn");
+
+	missionBtn.onclick = () => {
+		const value = missionInput.value.trim();
+		console.log("[UI] Add Mission clicked:", value);
+
+		if (!value) return;
+
+		addMission(value);
+		missionInput.value = "";
 	};
 });
 
 /****************************************************
- * SECTION 6 — APPLICATION BOOTSTRAP
- * ----------------------------------
- * Entry point for the renderer process.
+ * SECTION 7 — APPLICATION BOOTSTRAP
  ****************************************************/
 
 loadData();
