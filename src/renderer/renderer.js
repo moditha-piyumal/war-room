@@ -112,7 +112,53 @@ function toggleTask(id) {
 /****************************************************
  * SECTION 5 — RENDERING LOGIC (Tasks + Missions)
  ****************************************************/
+// Creates a dropdown to assign a task to a mission
+function createMissionDropdown(task) {
+	console.log(
+		"[createMissionDropdown] Building dropdown for task:",
+		task.title
+	);
 
+	const select = document.createElement("select");
+
+	// Option: No mission
+	const noneOption = document.createElement("option");
+	noneOption.value = "";
+	noneOption.textContent = "No mission";
+	select.appendChild(noneOption);
+
+	// Mission options
+	appData.missions.forEach((mission) => {
+		const option = document.createElement("option");
+		option.value = mission.id;
+		option.textContent = `Mission: ${mission.title}`;
+		select.appendChild(option);
+	});
+
+	// Set current value
+	select.value = task.missionId || "";
+
+	// Handle assignment change
+	select.onchange = () => {
+		const newMissionId = select.value || null;
+
+		console.log(
+			"[Mission Assignment] Task:",
+			task.title,
+			"→ Mission ID:",
+			newMissionId
+		);
+
+		task.missionId = newMissionId;
+		task.updatedAt = Date.now();
+
+		persist();
+		renderTasks();
+	};
+
+	return select;
+}
+// Renders the task list with missions as contextual items
 function renderTasks() {
 	console.log("[renderTasks] Rendering task list (with missions)...");
 
@@ -137,12 +183,12 @@ function renderTasks() {
 		list.appendChild(li);
 	});
 
-	// 2️⃣ Render standalone tasks (not assigned to a mission)
-	const standaloneTasks = appData.tasks.filter(
-		(task) => task.missionId === null
-	);
+	// 2️⃣ Render ALL tasks (standalone + assigned)
+	// In Step F.3 we will group assigned tasks under missions.
+	// For now, we just keep them visible so nothing "disappears".
+	console.log("[renderTasks] Rendering ALL tasks (including assigned ones)...");
 
-	standaloneTasks.forEach((task) => {
+	appData.tasks.forEach((task) => {
 		const li = document.createElement("li");
 
 		const checkbox = document.createElement("input");
@@ -157,8 +203,29 @@ function renderTasks() {
 			span.style.textDecoration = "line-through";
 		}
 
+		// Show current mission name (for debugging + clarity)
+		const missionLabel = document.createElement("span");
+		missionLabel.style.marginLeft = "10px";
+		missionLabel.style.opacity = "0.7";
+		missionLabel.style.fontSize = "0.9em";
+
+		if (task.missionId) {
+			const mission = appData.missions.find((m) => m.id === task.missionId);
+			missionLabel.textContent = mission
+				? `(in: ${mission.title})`
+				: "(in: Unknown mission)";
+		} else {
+			missionLabel.textContent = "(no mission)";
+		}
+
+		// Mission assignment dropdown (Step F.2 feature)
+		const dropdown = createMissionDropdown(task);
+
 		li.appendChild(checkbox);
 		li.appendChild(span);
+		li.appendChild(missionLabel);
+		li.appendChild(dropdown);
+
 		list.appendChild(li);
 	});
 
@@ -166,8 +233,8 @@ function renderTasks() {
 		"[renderTasks] Render complete.",
 		"Missions:",
 		appData.missions.length,
-		"Standalone tasks:",
-		standaloneTasks.length
+		"Total tasks:",
+		appData.tasks.length
 	);
 }
 
