@@ -18,7 +18,7 @@ function createWindow() {
 	mainWindow.loadFile(path.join(__dirname, "renderer", "index.html"));
 
 	// Dev tools ON for development
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
 }
 ipcMain.handle("get-data", () => {
 	return readData();
