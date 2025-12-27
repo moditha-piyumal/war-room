@@ -132,7 +132,8 @@ function createMissionDropdown(task) {
 	appData.missions.forEach((mission) => {
 		const option = document.createElement("option");
 		option.value = mission.id;
-		option.textContent = `Mission: ${mission.title}`;
+		option.textContent = `Mission: ${truncateLabel(mission.title, 15)}`;
+
 		select.appendChild(option);
 	});
 
@@ -379,6 +380,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		missionInput.value = "";
 	};
 });
+
+// Helper Function
+function truncateLabel(text, maxLength = 15) {
+	if (text.length <= maxLength) return text;
+	return text.slice(0, maxLength - 1) + "…";
+}
 
 /****************************************************
  * SECTION 7 — APPLICATION BOOTSTRAP
