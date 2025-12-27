@@ -236,6 +236,7 @@ function renderMission(mission, list) {
 	if (mission.isManuallyCompleted) {
 		checkmark.classList.add("completed");
 		checkmark.textContent = "✓ Completed";
+		missionPill.classList.add("completed");
 	} else if (eligible) {
 		checkmark.classList.add("eligible");
 		checkmark.textContent = "✓";

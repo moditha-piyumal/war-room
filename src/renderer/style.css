@@ -164,8 +164,20 @@ li {
 }
 
 /* Missions are not clickable (yet) */
+/* ================================
+   UI Stabilization — Pass 1
+   Mission visual tuning
+   ================================ */
+
 .mission-pill {
-    cursor: default;
+    padding: 6px 14px;
+    /* slightly tighter than tasks */
+    font-size: 0.85rem;
+    /* smaller than task text */
+    background-color: #e5e7eb;
+    /* softer neutral */
+    color: #334155;
+    /* calm text */
 }
 
 /* ================================
@@ -241,4 +253,32 @@ li {
     opacity: 1;
     cursor: default;
     font-weight: 500;
+}
+
+/* Completed missions should fade into context */
+.mission-pill .mission-checkmark.completed {
+    font-size: 0.75rem;
+    /* slightly smaller */
+    opacity: 0.85;
+}
+
+/* Entire completed mission pill becomes calmer */
+.mission-pill.completed {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+
+/* Space before each mission */
+.mission-item {
+    margin-top: 16px;
+}
+
+/* Tighter spacing between tasks under same mission */
+.task-under-mission {
+    margin-top: 4px;
+}
+
+/* Normal spacing for standalone tasks */
+.task-item:not(.task-under-mission) {
+    margin-top: 8px;
 }
