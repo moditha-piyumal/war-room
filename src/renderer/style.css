@@ -1,3 +1,7 @@
+/* =================================================
+   WAR ROOM — Global Base Styles
+   ================================================= */
+
 body {
     background-color: #0e0e0e;
     color: #e6e6e6;
@@ -5,13 +9,31 @@ body {
     padding: 20px;
 }
 
-/* ================================
-   STEP F.3 — Visual Grouping
-   ================================ */
 
-/* Mission header row */
+/* =================================================
+   List Reset & Normalization
+   (No bullets, no browser defaults)
+   ================================================= */
+
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+}
+
+
+/* =================================================
+   Task / Mission Grouping (Hierarchy)
+   ================================================= */
+
+/* Container row for each mission */
 .mission-item {
-    margin-top: 14px;
+    margin-top: 16px;
+    /* separation between missions */
     margin-bottom: 6px;
     font-weight: 600;
     opacity: 0.8;
@@ -22,14 +44,14 @@ body {
     margin: 4px 0;
 }
 
-/* Tasks that belong to a mission */
+/* Tasks under a mission */
 .task-under-mission {
     margin-left: 24px;
-    /* Visual indentation */
     position: relative;
+    margin-top: 4px;
 }
 
-/* Optional subtle guide line (tree hint, no lines yet) */
+/* Subtle tree hint (no connectors yet) */
 .task-under-mission::before {
     content: "";
     position: absolute;
@@ -41,28 +63,16 @@ body {
     opacity: 0.4;
 }
 
-/* ================================
-   STEP F — Remove list bullets
-   ================================ */
-
-ul {
-    list-style: none;
-    /* remove bullets */
-    padding-left: 0;
-    /* remove left indent */
-    margin: 0;
+/* Standalone task spacing */
+.task-item:not(.task-under-mission) {
+    margin-top: 8px;
 }
 
-li {
-    list-style: none;
-    /* extra safety */
-}
 
-/* ================================
-   STEP F.4 — Pill UI (Blue Theme)
-   ================================ */
+/* =================================================
+   Pill Base (Shared by Tasks & Missions)
+   ================================================= */
 
-/* Base pill */
 .pill {
     display: flex;
     align-items: center;
@@ -74,129 +84,58 @@ li {
     font-size: 14px;
     line-height: 1.2;
 
-    transition: background-color 0.15s ease,
+    transition:
+        background-color 0.15s ease,
         box-shadow 0.15s ease;
 }
 
-/* Task pills — primary */
+
+/* =================================================
+   Task Pills (Primary Elements)
+   ================================================= */
+
+/* =================================================
+   Task Pills (Primary Action Items)
+   ================================================= */
+
 .task-pill {
-    background-color: #e6f0ff;
-    /* soft blue */
-    color: #102a43;
-
-    box-shadow: inset 0 0 0 1px #b6d4fe;
-}
-
-/* Hover effect (subtle) */
-.task-pill:hover {
     background-color: #dbeafe;
-}
+    /* strong soft blue */
+    color: #0f172a;
+    /* dark readable text */
 
-/* Mission pills — muted */
-.mission-pill {
-    background-color: #f1f5f9;
-    /* blue-gray */
-    color: #334155;
+    box-shadow:
+        inset 0 0 0 1px #93c5fd,
+        /* blue border */
+        0 1px 2px rgba(0, 0, 0, 0.15);
 
-    box-shadow: inset 0 0 0 1px #cbd5e1;
-}
-
-/* Checkbox styling alignment */
-.pill input[type="checkbox"] {
     cursor: pointer;
 }
 
-/* Completed task styling */
+.task-pill:hover {
+    background-color: #c7ddfe;
+}
+
+/* Task title expands, controls stay aligned */
 .task-pill span {
     flex-grow: 1;
 }
 
+/* Completed task — visually quieter, still blue-family */
 .task-pill.completed {
-    opacity: 0.6;
-}
-
-/* Dropdown alignment */
-.pill select {
-    margin-left: auto;
-}
-
-/* ================================
-   UI Stabilization — Dropdown styling
-   ================================ */
-
-.pill select {
-    appearance: none;
-    /* remove native styling */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-
-    background-color: #e6f0ff;
-    /* same as task pill */
-    color: #102a43;
-
-    border: none;
-    border-radius: 999px;
-
-    padding: 4px 22px 4px 10px;
-    font-size: 0.85rem;
-
-    cursor: pointer;
-}
-
-/* Subtle hover */
-.pill select:hover {
-    background-color: #dbeafe;
-}
-
-/* Remove ugly focus outline, replace with soft one */
-.pill select:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-}
-
-/* ================================
-   STEP F — Cursor feedback
-   ================================ */
-
-/* Tasks are clickable */
-.task-pill {
-    cursor: pointer;
-}
-
-/* Missions are not clickable (yet) */
-/* ================================
-   UI Stabilization — Pass 1
-   Mission visual tuning
-   ================================ */
-
-.mission-pill {
-    padding: 6px 14px;
-    /* slightly tighter than tasks */
-    font-size: 0.85rem;
-    /* smaller than task text */
-    background-color: #e5e7eb;
-    /* softer neutral */
-    color: #334155;
-    /* calm text */
-}
-
-/* ================================
-   STEP F.5 — Completed Task Checkmark
-   ================================ */
-
-/* Completed task appearance */
-.task-pill.completed {
-    background-color: #eef4fb;
-    /* softer blue */
-    color: #475569;
+    background-color: #eff6ff;
+    /* very light blue */
+    color: #64748b;
     /* muted text */
+    box-shadow: inset 0 0 0 1px #bfdbfe;
 }
 
-/* ================================
-   Stable checkmark space (no layout shift)
-   ================================ */
 
-/* Always reserve space for checkmark */
+/* =================================================
+   Task Completion Checkmark (CSS-only, stable)
+   ================================================= */
+
+/* Reserve space for checkmark (no layout shift) */
 .task-pill::after {
     content: "";
     width: 10px;
@@ -214,19 +153,40 @@ li {
 /* Reveal checkmark when completed */
 .task-pill.completed::after {
     border-left-color: #2563eb;
-    /* blue check */
     border-bottom-color: #2563eb;
 }
 
-/* ================================
-   STEP G — Mission completion UI
-   ================================ */
+
+/* =================================================
+   Mission Pills (Contextual, Quieter)
+   ================================================= */
 
 .mission-pill {
     display: flex;
     align-items: center;
     gap: 10px;
+
+    padding: 6px 14px;
+    /* tighter than tasks */
+    font-size: 0.85rem;
+
+    background-color: #e5e7eb;
+    /* neutral gray */
+    color: #334155;
+
+    box-shadow: inset 0 0 0 1px #cbd5e1;
 }
+
+/* Completed mission calm-down */
+.mission-pill.completed {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+
+
+/* =================================================
+   Mission Completion Indicator (Step G)
+   ================================================= */
 
 .mission-checkmark {
     margin-left: auto;
@@ -240,45 +200,49 @@ li {
     cursor: not-allowed;
 }
 
-/* Eligible but not completed */
+/* Eligible for completion */
 .mission-checkmark.eligible {
     color: #2563eb;
     opacity: 1;
     cursor: pointer;
 }
 
-/* Completed */
+/* Completed mission */
 .mission-checkmark.completed {
     color: #16a34a;
-    opacity: 1;
+    font-size: 0.75rem;
+    opacity: 0.85;
     cursor: default;
     font-weight: 500;
 }
 
-/* Completed missions should fade into context */
-.mission-pill .mission-checkmark.completed {
-    font-size: 0.75rem;
-    /* slightly smaller */
-    opacity: 0.85;
+
+/* =================================================
+   Dropdown Styling (Integrated into Pills)
+   ================================================= */
+
+.pill select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-color: #e6f0ff;
+    color: #102a43;
+
+    border: none;
+    border-radius: 999px;
+
+    padding: 4px 22px 4px 10px;
+    font-size: 0.85rem;
+
+    cursor: pointer;
 }
 
-/* Entire completed mission pill becomes calmer */
-.mission-pill.completed {
-    background-color: #f1f5f9;
-    color: #64748b;
+.pill select:hover {
+    background-color: #dbeafe;
 }
 
-/* Space before each mission */
-.mission-item {
-    margin-top: 16px;
-}
-
-/* Tighter spacing between tasks under same mission */
-.task-under-mission {
-    margin-top: 4px;
-}
-
-/* Normal spacing for standalone tasks */
-.task-item:not(.task-under-mission) {
-    margin-top: 8px;
+.pill select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
 }
