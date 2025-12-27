@@ -218,6 +218,20 @@ function renderMission(mission, list) {
 
 	const eligible = isMissionEligible(mission.id);
 
+	// 🔒 Step G fix:
+	// If mission was manually completed but is no longer eligible,
+	// automatically revert it to incomplete.
+	if (mission.isManuallyCompleted && !eligible) {
+		console.log(
+			"[Mission] Eligibility lost, reverting completion:",
+			mission.title
+		);
+
+		mission.isManuallyCompleted = false;
+		mission.updatedAt = Date.now();
+		persist();
+	}
+
 	if (mission.isManuallyCompleted) {
 		checkmark.classList.add("completed");
 		checkmark.textContent = "✓ Completed";
