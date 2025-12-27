@@ -102,3 +102,41 @@ body {
 .pill select {
     margin-left: auto;
 }
+
+/* ================================
+   STEP F.5 — Completed Task Checkmark
+   ================================ */
+
+/* Completed task appearance */
+.task-pill.completed {
+    background-color: #eef4fb;
+    /* softer blue */
+    color: #475569;
+    /* muted text */
+}
+
+/* ================================
+   Stable checkmark space (no layout shift)
+   ================================ */
+
+/* Always reserve space for checkmark */
+.task-pill::after {
+    content: "";
+    width: 10px;
+    height: 6px;
+
+    margin-left: auto;
+    margin-right: 4px;
+
+    border-left: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+
+    transform: rotate(-45deg);
+}
+
+/* Reveal checkmark when completed */
+.task-pill.completed::after {
+    border-left-color: #2563eb;
+    /* blue check */
+    border-bottom-color: #2563eb;
+}

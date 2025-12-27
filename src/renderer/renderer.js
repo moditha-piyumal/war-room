@@ -160,33 +160,38 @@ function createMissionDropdown(task) {
 }
 
 function createTaskPill(task) {
-	const checkbox = document.createElement("input");
-	checkbox.type = "checkbox";
-	checkbox.checked = task.isDone;
-	checkbox.onchange = () => toggleTask(task.id);
-
 	const span = document.createElement("span");
 	span.textContent = task.title;
 
-	if (task.isDone) {
-		span.style.textDecoration = "line-through";
-	}
-
+	// Mission assignment dropdown
 	const dropdown = createMissionDropdown(task);
+
+	// IMPORTANT:
+	// Prevent dropdown interaction from toggling task completion
+	dropdown.addEventListener("click", (e) => {
+		e.stopPropagation();
+	});
 
 	const pill = document.createElement("div");
 	pill.classList.add("pill", "task-pill");
 
+	// Toggle completion when clicking the pill
+	pill.addEventListener("click", () => {
+		console.log("[Task Toggle] Pill clicked:", task.title);
+		toggleTask(task.id);
+	});
+
+	// Visual state for completed task (no strike-through)
 	if (task.isDone) {
 		pill.classList.add("completed");
 	}
 
-	pill.appendChild(checkbox);
 	pill.appendChild(span);
 	pill.appendChild(dropdown);
 
 	return pill;
 }
+
 function renderMission(mission, list) {
 	const missionLi = document.createElement("li");
 	missionLi.classList.add("mission-item");
