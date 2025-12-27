@@ -72,6 +72,7 @@ function addMission(title) {
  ****************************************************/
 
 function addTask(title) {
+	console.log("[addTask] FINAL title received:", title);
 	console.log("[addTask] Creating task:", title);
 
 	const newTask = {
@@ -285,12 +286,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	const taskBtn = document.getElementById("add-btn");
 
 	taskBtn.onclick = () => {
-		const value = taskInput.value.trim();
-		console.log("[UI] Add Task clicked:", value);
+		const MAX_TASK_LENGTH = 40;
 
-		if (!value) return;
+		const rawValue = taskInput.value.trim();
+		console.log("[UI] Add Task clicked (raw):", rawValue);
 
-		addTask(value);
+		if (!rawValue) return;
+
+		const trimmedValue = rawValue.slice(0, MAX_TASK_LENGTH);
+		console.log("[UI] Add Task (trimmed to max length):", trimmedValue);
+
+		addTask(trimmedValue);
 		taskInput.value = "";
 	};
 
@@ -299,12 +305,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	const missionBtn = document.getElementById("add-mission-btn");
 
 	missionBtn.onclick = () => {
-		const value = missionInput.value.trim();
-		console.log("[UI] Add Mission clicked:", value);
+		const MAX_MISSION_LENGTH = 40;
 
-		if (!value) return;
+		const rawValue = missionInput.value.trim();
+		console.log("[UI] Add Mission clicked (raw):", rawValue);
 
-		addMission(value);
+		if (!rawValue) return;
+
+		const trimmedValue = rawValue.slice(0, MAX_MISSION_LENGTH);
+		console.log("[UI] Add Mission (trimmed to max length):", trimmedValue);
+
+		addMission(trimmedValue);
 		missionInput.value = "";
 	};
 });

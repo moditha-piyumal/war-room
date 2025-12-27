@@ -42,6 +42,23 @@ body {
 }
 
 /* ================================
+   STEP F — Remove list bullets
+   ================================ */
+
+ul {
+    list-style: none;
+    /* remove bullets */
+    padding-left: 0;
+    /* remove left indent */
+    margin: 0;
+}
+
+li {
+    list-style: none;
+    /* extra safety */
+}
+
+/* ================================
    STEP F.4 — Pill UI (Blue Theme)
    ================================ */
 
@@ -101,6 +118,20 @@ body {
 /* Dropdown alignment */
 .pill select {
     margin-left: auto;
+}
+
+/* ================================
+   STEP F — Cursor feedback
+   ================================ */
+
+/* Tasks are clickable */
+.task-pill {
+    cursor: pointer;
+}
+
+/* Missions are not clickable (yet) */
+.mission-pill {
+    cursor: default;
 }
 
 /* ================================
