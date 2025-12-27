@@ -171,3 +171,40 @@ li {
     /* blue check */
     border-bottom-color: #2563eb;
 }
+
+/* ================================
+   STEP G — Mission completion UI
+   ================================ */
+
+.mission-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mission-checkmark {
+    margin-left: auto;
+    font-size: 0.85rem;
+    opacity: 0.4;
+    user-select: none;
+}
+
+/* Not eligible */
+.mission-checkmark.inactive {
+    cursor: not-allowed;
+}
+
+/* Eligible but not completed */
+.mission-checkmark.eligible {
+    color: #2563eb;
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* Completed */
+.mission-checkmark.completed {
+    color: #16a34a;
+    opacity: 1;
+    cursor: default;
+    font-weight: 500;
+}

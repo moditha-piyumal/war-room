@@ -193,13 +193,59 @@ function createTaskPill(task) {
 	return pill;
 }
 
+function isMissionEligible(missionId) {
+	const tasks = appData.tasks.filter((task) => task.missionId === missionId);
+
+	if (tasks.length === 0) return false;
+
+	return tasks.every((task) => task.isDone);
+}
+
 function renderMission(mission, list) {
 	const missionLi = document.createElement("li");
 	missionLi.classList.add("mission-item");
 
 	const missionPill = document.createElement("div");
 	missionPill.classList.add("pill", "mission-pill");
-	missionPill.textContent = `Mission: ${mission.title}`;
+
+	// Mission title
+	const titleSpan = document.createElement("span");
+	titleSpan.textContent = `Mission: ${mission.title}`;
+
+	// Mission completion indicator
+	const checkmark = document.createElement("span");
+	checkmark.classList.add("mission-checkmark");
+
+	const eligible = isMissionEligible(mission.id);
+
+	if (mission.isManuallyCompleted) {
+		checkmark.classList.add("completed");
+		checkmark.textContent = "✓ Completed";
+	} else if (eligible) {
+		checkmark.classList.add("eligible");
+		checkmark.textContent = "✓";
+	} else {
+		checkmark.classList.add("inactive");
+		checkmark.textContent = "✓";
+	}
+
+	// Click handler (manual completion only)
+	checkmark.addEventListener("click", (e) => {
+		e.stopPropagation();
+
+		if (!eligible || mission.isManuallyCompleted) return;
+
+		console.log("[Mission] Manually completed:", mission.title);
+
+		mission.isManuallyCompleted = true;
+		mission.updatedAt = Date.now();
+
+		persist();
+		renderTasks();
+	});
+
+	missionPill.appendChild(titleSpan);
+	missionPill.appendChild(checkmark);
 
 	missionLi.appendChild(missionPill);
 	list.appendChild(missionLi);
