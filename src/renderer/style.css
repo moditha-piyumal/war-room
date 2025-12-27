@@ -121,6 +121,40 @@ li {
 }
 
 /* ================================
+   UI Stabilization — Dropdown styling
+   ================================ */
+
+.pill select {
+    appearance: none;
+    /* remove native styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-color: #e6f0ff;
+    /* same as task pill */
+    color: #102a43;
+
+    border: none;
+    border-radius: 999px;
+
+    padding: 4px 22px 4px 10px;
+    font-size: 0.85rem;
+
+    cursor: pointer;
+}
+
+/* Subtle hover */
+.pill select:hover {
+    background-color: #dbeafe;
+}
+
+/* Remove ugly focus outline, replace with soft one */
+.pill select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+/* ================================
    STEP F — Cursor feedback
    ================================ */
 
