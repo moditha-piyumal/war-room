@@ -98,22 +98,27 @@ li {
    Task Pills (Primary Action Items)
    ================================================= */
 
+/* Incomplete task — primary, actionable */
 .task-pill {
-    background-color: #dbeafe;
-    /* strong soft blue */
+    background-color: #cfe3ff;
+    /* stronger blue */
     color: #0f172a;
-    /* dark readable text */
+
+    padding: 10px 16px;
+    /* taller pill */
+    font-size: 0.95rem;
+    /* slightly larger text */
+    font-weight: 500;
 
     box-shadow:
-        inset 0 0 0 1px #93c5fd,
-        /* blue border */
-        0 1px 2px rgba(0, 0, 0, 0.15);
+        inset 0 0 0 1px #7aa7ff,
+        0 2px 4px rgba(0, 0, 0, 0.18);
 
     cursor: pointer;
 }
 
 .task-pill:hover {
-    background-color: #c7ddfe;
+    background-color: #bdd9ff;
 }
 
 /* Task title expands, controls stay aligned */
@@ -121,12 +126,18 @@ li {
     flex-grow: 1;
 }
 
-/* Completed task — visually quieter, still blue-family */
+/* Completed task — settled, quieter */
 .task-pill.completed {
-    background-color: #eff6ff;
+    background-color: #eef5ff;
     /* very light blue */
     color: #64748b;
-    /* muted text */
+
+    padding: 6px 14px;
+    /* shorter pill */
+    font-size: 0.82rem;
+    /* smaller text */
+    font-weight: 400;
+
     box-shadow: inset 0 0 0 1px #bfdbfe;
 }
 
