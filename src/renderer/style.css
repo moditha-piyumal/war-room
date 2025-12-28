@@ -21,6 +21,12 @@ li {
     padding: 0;
 }
 
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 
 /* =================================================
    Layout & Hierarchy
@@ -111,6 +117,12 @@ li {
     box-shadow:
         inset 0 0 0 1px #7aa7ff,
         0 3px 6px rgba(0, 0, 0, 0.22);
+    background-color: #bdd9ff;
+}
+
+.task-pill.completed:hover {
+    background-color: #eef5ff;
+    /* no change */
 }
 
 /* Task title flexes, controls stay right */
@@ -171,14 +183,21 @@ li {
    (renderer.js: .pill.mission-pill [+ .completed])
    ================================================= */
 
+/* Mission pill — secondary container */
 .mission-pill {
-    background-color: #e5e7eb;
-    color: #334155;
+    width: 720px;
+    max-width: 100%;
 
-    padding: 6px 14px;
+    background-color: rgba(148, 163, 184, 0.18);
+    color: #cbd5f5;
+
+    padding: 8px 16px;
     font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 10px;
 
-    box-shadow: inset 0 0 0 1px #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 2px 6px rgba(112, 175, 218, 0.432);
 }
 
 /* Completed mission (calm) */
@@ -265,6 +284,9 @@ li {
     opacity: 0.95;
 
     margin: 14px 0 22px 0;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(68, 136, 224, 0.418);
 }
 
 .entry-row {
