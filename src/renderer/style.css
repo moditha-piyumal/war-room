@@ -89,6 +89,9 @@ li {
 
 /* Incomplete task */
 .task-pill {
+    width: 750px;
+    /* ← adjust if needed */
+    max-width: 100%;
     background-color: #cfe3ff;
     color: #0f172a;
 
@@ -103,23 +106,35 @@ li {
     cursor: pointer;
 }
 
+/* Gentle hover lift for actionable tasks */
 .task-pill:hover {
-    background-color: #bdd9ff;
+    box-shadow:
+        inset 0 0 0 1px #7aa7ff,
+        0 3px 6px rgba(0, 0, 0, 0.22);
 }
 
 /* Task title flexes, controls stay right */
 .task-pill span {
     flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Completed task */
 .task-pill.completed {
+    width: 750px;
+    /* same width */
+    max-width: 100%;
     background-color: #eef5ff;
     color: #64748b;
-
-    padding: 6px 14px;
+    cursor: default;
+    padding: 8px 16px;
+    /* was 6px 14px — normalize horizontal padding */
     font-size: 0.82rem;
     font-weight: 400;
+
+    line-height: 1.4;
 
     box-shadow: inset 0 0 0 1px #bfdbfe;
 }
@@ -222,8 +237,10 @@ li {
     border: none;
     border-radius: 999px;
 
-    padding: 4px 22px 4px 10px;
-    font-size: 0.85rem;
+    padding: 4px 20px 4px 10px;
+    /* slightly tighter */
+    font-size: 0.82rem;
+    /* subtly smaller than task text */
 
     cursor: pointer;
 }
