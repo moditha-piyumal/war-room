@@ -211,33 +211,89 @@ li {
    Mission Completion Indicator (Step G)
    ================================================= */
 
+/* Base mission checkmark layout */
 .mission-checkmark {
     margin-left: auto;
-    font-size: 0.85rem;
-    opacity: 0.4;
     user-select: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
-/* Not eligible */
+/* Inactive: just a faint ✓ (no circle) */
 .mission-checkmark.inactive {
-    cursor: not-allowed;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    opacity: 0.35;
 }
 
-/* Eligible */
+/* Eligible: blue circle with ✓ */
 .mission-checkmark.eligible {
     color: #2563eb;
+    border: 2px solid #2563eb;
+    background: transparent;
     opacity: 1;
     cursor: pointer;
 }
 
-/* Completed */
+/* Completed mission — add text before the badge */
 .mission-checkmark.completed {
-    color: #16a34a;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    width: auto;
+    /* 🔑 FIX */
+    height: auto;
+    /* 🔑 FIX */
+
+    color: #40c7f0;
     font-size: 0.75rem;
     font-weight: 500;
-    opacity: 0.85;
+
     cursor: default;
 }
+
+/* "Completed" text (left side) */
+.mission-checkmark.completed::before {
+    content: "Completed";
+    opacity: 0.85;
+}
+
+/* Circle + checkmark stays as-is */
+.mission-checkmark.completed::after {
+    content: "✓";
+
+    width: 22px;
+    height: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    background-color: #dbeafe;
+
+    color: #1c42ad;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Filled circle with checkmark */
+
+
+/* Add 'Completed' text */
+
 
 
 /* =================================================
