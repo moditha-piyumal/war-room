@@ -1,6 +1,6 @@
 {
 	"name": "war-room",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "WAR ROOM - Offline-first mission & task command app",
 	"main": "src/main.js",
 	"scripts": {
