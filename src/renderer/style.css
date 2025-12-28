@@ -253,3 +253,66 @@ li {
     outline: none;
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
 }
+
+/* =================================================
+   Entry Panel (Task & Mission Input)
+   ================================================= */
+
+.entry-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0.95;
+
+    margin: 14px 0 22px 0;
+}
+
+.entry-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.entry-row input {
+    width: 580px;
+    padding: 7px 14px;
+    /* slightly more breathing room */
+
+    border-radius: 999px;
+    border: none;
+    outline: none;
+
+    background-color: #1f2933;
+    /* ✅ lighter dark slate */
+    color: #e5e7eb;
+
+    font-size: 0.85rem;
+}
+
+.entry-row input::placeholder {
+    color: #9ca3af;
+}
+
+.entry-row input:focus {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
+}
+
+.entry-row button {
+    width: 100px;
+    padding: 6px 14px;
+
+    border-radius: 999px;
+    border: none;
+
+    background-color: #2563eb;
+    color: #ffffff;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.entry-row button:hover {
+    background-color: #1d4ed8;
+}
