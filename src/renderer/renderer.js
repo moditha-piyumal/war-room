@@ -218,7 +218,7 @@ function createTaskPill(task) {
 	taskCheckmark.classList.add("task-checkmark");
 	taskCheckmark.textContent = "✓";
 
-	// Style state (lets CSS show completed vs incomplete clearly)
+	// State
 	if (task.isDone) {
 		taskCheckmark.classList.add("completed");
 	} else {

@@ -206,30 +206,6 @@ li {
 }
 
 
-/* =================================================
-   Task Completion Indicator (CSS-only)
-   ================================================= */
-
-/* Reserved space for checkmark */
-.task-pill::after {
-    content: "";
-    width: 10px;
-    height: 6px;
-
-    margin-left: auto;
-    margin-right: 4px;
-
-    border-left: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-
-    transform: rotate(-45deg);
-}
-
-/* Visible when completed */
-.task-pill.completed::after {
-    border-left-color: #2563eb;
-    border-bottom-color: #2563eb;
-}
 
 
 /* =================================================
@@ -504,19 +480,61 @@ li {
     /* ✅ pushes checkmark to the far right edge */
 }
 
+/* =================================================
+   Task Completion Indicator (Step F)
+   ================================================= */
+
 .task-checkmark {
-    font-weight: 700;
-    font-size: 0.9rem;
-    line-height: 1;
+    margin-left: auto;
     user-select: none;
+    transform: scale(0.8);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
-/* Incomplete task checkmark (dim) */
+/* Inactive: just a faint ✓ (no circle) */
+
+
+/* Eligible: blue circle with ✓ */
 .task-checkmark.inactive {
-    opacity: 0.35;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+    background: transparent;
+    opacity: 1;
+    cursor: pointer;
 }
 
-/* Completed task checkmark (bright) */
+/* Completed mission — add text before the badge */
 .task-checkmark.completed {
-    opacity: 1;
+    width: 22px;
+    height: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 2px solid #e1e5ee;
+    background-color: #ee0b0b;
+
+    color: #d3d6df;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
+
+
+/* Circle + checkmark stays as-is */
+/* .task-checkmark.completed::after {
+    content: "✓";
+
+
+} */
