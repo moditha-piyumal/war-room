@@ -112,7 +112,10 @@ li {
 .pill {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    /* 🔥 critical: stops centering */
     gap: 10px;
+
 
     border-radius: 999px;
     line-height: 1.2;
@@ -122,6 +125,20 @@ li {
         box-shadow 0.15s ease;
 }
 
+.delete-btn {
+    margin-left: 8px;
+
+    font-size: 0.75rem;
+    line-height: 1;
+
+    color: #94a3b8;
+    cursor: pointer;
+    user-select: none;
+}
+
+.delete-btn:hover {
+    color: #ef4444;
+}
 
 /* =================================================
    TASK PILLS — Primary Action Items
@@ -163,6 +180,8 @@ li {
 /* Task title flexes, controls stay right */
 .task-pill span {
     flex-grow: 1;
+    min-width: 0;
+    /* 🔥 CRITICAL */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -428,4 +447,51 @@ li {
 
 .entry-row button:hover {
     background-color: #1d4ed8;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-box {
+    background: #020617;
+    color: #e5e7eb;
+    padding: 16px 20px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.modal-actions button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.modal-actions button.danger {
+    background: #ef4444;
+    color: white;
+    border: none;
+}
+
+.modal-actions button.secondary {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #cbd5f5;
 }

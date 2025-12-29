@@ -184,6 +184,19 @@ function createTaskPill(task) {
 	const pill = document.createElement("div");
 	pill.classList.add("pill", "task-pill");
 
+	const deleteBtn = createDeleteButton(() => {
+		openConfirmModal("Delete this task?", [
+			{
+				label: "Delete",
+				className: "danger",
+				onClick: () => deleteTask(task.id),
+			},
+			{ label: "Cancel", className: "secondary", onClick: () => {} },
+		]);
+	});
+
+	// pill.appendChild(deleteBtn);
+
 	// Toggle completion when clicking the pill
 	pill.addEventListener("click", () => {
 		console.log("[Task Toggle] Pill clicked:", task.title);
@@ -197,6 +210,7 @@ function createTaskPill(task) {
 
 	pill.appendChild(span);
 	pill.appendChild(dropdown);
+	pill.appendChild(deleteBtn);
 
 	return pill;
 }
@@ -251,6 +265,26 @@ function renderMission(mission, list) {
 	const checkmark = document.createElement("span");
 	checkmark.classList.add("mission-checkmark");
 
+	const deleteBtn = createDeleteButton(() => {
+		openConfirmModal("Delete this mission. What should happen to its tasks?", [
+			{
+				label: "Delete Mission Only",
+				className: "secondary",
+				onClick: () => deleteMissionOnly(mission.id),
+			},
+			{
+				label: "Delete Mission + Tasks",
+				className: "danger",
+				onClick: () => deleteMissionAndTasks(mission.id),
+			},
+			{
+				label: "Cancel",
+				className: "secondary",
+				onClick: () => {},
+			},
+		]);
+	});
+
 	const eligible = isMissionEligible(mission.id);
 
 	// 🔒 Step G fix:
@@ -296,6 +330,7 @@ function renderMission(mission, list) {
 
 	missionPill.appendChild(titleSpan);
 	missionPill.appendChild(checkmark);
+	missionPill.appendChild(deleteBtn);
 
 	missionLi.appendChild(missionPill);
 	list.appendChild(missionLi);
@@ -444,6 +479,86 @@ document.addEventListener("DOMContentLoaded", () => {
 function truncateLabel(text, maxLength = 15) {
 	if (text.length <= maxLength) return text;
 	return text.slice(0, maxLength - 1) + "…";
+}
+
+function createDeleteButton(onClick) {
+	const btn = document.createElement("span");
+	btn.textContent = "✕";
+	btn.className = "delete-btn";
+	btn.title = "Delete";
+
+	btn.addEventListener("click", (e) => {
+		e.stopPropagation(); // prevent pill click
+		onClick();
+	});
+
+	return btn;
+}
+
+function openConfirmModal(text, buttons) {
+	const modal = document.getElementById("confirm-modal");
+	const textEl = document.getElementById("confirm-text");
+	const actions = document.getElementById("confirm-actions");
+
+	textEl.textContent = text;
+	actions.innerHTML = "";
+
+	buttons.forEach(({ label, className, onClick }) => {
+		const btn = document.createElement("button");
+		btn.textContent = label;
+		btn.className = className;
+
+		btn.onclick = () => {
+			onClick();
+			closeConfirmModal();
+		};
+
+		actions.appendChild(btn);
+	});
+
+	modal.classList.remove("hidden");
+}
+
+function closeConfirmModal() {
+	document.getElementById("confirm-modal").classList.add("hidden");
+}
+
+function deleteTask(taskId) {
+	appData.tasks = appData.tasks.filter((t) => t.id !== taskId);
+
+	// Recalculate mission eligibility
+	appData.missions.forEach((mission) => {
+		const missionTasks = appData.tasks.filter(
+			(t) => t.missionId === mission.id
+		);
+		if (missionTasks.some((t) => !t.isDone)) {
+			mission.isManuallyCompleted = false;
+		}
+	});
+
+	persist();
+	renderTasks();
+}
+
+function deleteMissionOnly(missionId) {
+	appData.tasks.forEach((task) => {
+		if (task.missionId === missionId) {
+			task.missionId = null;
+		}
+	});
+
+	appData.missions = appData.missions.filter((m) => m.id !== missionId);
+
+	persist();
+	renderTasks();
+}
+
+function deleteMissionAndTasks(missionId) {
+	appData.tasks = appData.tasks.filter((t) => t.missionId !== missionId);
+	appData.missions = appData.missions.filter((m) => m.id !== missionId);
+
+	persist();
+	renderTasks();
 }
 
 /****************************************************
