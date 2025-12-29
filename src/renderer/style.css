@@ -130,14 +130,19 @@ li {
 
     font-size: 0.75rem;
     line-height: 1;
+    font-weight: 800;
 
-    color: #94a3b8;
+    color: #e60707;
+    border: orangered solid 1.5px;
     cursor: pointer;
     user-select: none;
 }
 
 .delete-btn:hover {
-    color: #ef4444;
+    color: #e60707;
+    border: orangered solid 1.5px;
+    background-color: #102a43;
+
 }
 
 /* =================================================
@@ -147,9 +152,10 @@ li {
 
 /* Incomplete task */
 .task-pill {
-    width: 750px;
+    max-width: 750px;
+    width: 100%;
     /* ← adjust if needed */
-    max-width: 100%;
+    /* max-width: 100%; */
     background-color: #cfe3ff;
     color: #0f172a;
 
@@ -189,9 +195,10 @@ li {
 
 /* Completed task */
 .task-pill.completed {
-    width: 750px;
+    max-width: 750px;
+    width: 100%;
     /* same width */
-    max-width: 100%;
+    /* max-width: 100%; */
     background-color: #eef5ff;
     color: #64748b;
     cursor: default;
@@ -215,8 +222,8 @@ li {
 
 /* Mission pill — secondary container */
 .mission-pill {
-    width: 720px;
-    max-width: 100%;
+    max-width: 750px;
+    width: 100%;
 
     background-color: rgba(148, 163, 184, 0.18);
     color: #cbd5f5;
@@ -260,10 +267,10 @@ li {
 
 /* Inactive: just a faint ✓ (no circle) */
 .mission-checkmark.inactive {
-    width: auto;
-    height: auto;
-    border-radius: 0;
-    opacity: 0.35;
+    color: rgba(148, 163, 184, 0.18);
+    border: 2px solid rgba(148, 163, 184, 0.18);
+    background: transparent;
+    opacity: 1;
 }
 
 /* Eligible: blue circle with ✓ */
@@ -506,7 +513,7 @@ li {
 
 /* Eligible: blue circle with ✓ */
 .task-checkmark.inactive {
-    color: #2563eb;
+    color: #cfe3ff;
     border: 2px solid #2563eb;
     background: transparent;
     opacity: 1;
@@ -523,8 +530,8 @@ li {
     justify-content: center;
 
     border-radius: 50%;
-    border: 2px solid #e1e5ee;
-    background-color: #ee0b0b;
+    border: 2px solid #2563eb;
+    background-color: #2563eb;
 
     color: #d3d6df;
     font-size: 0.75rem;
