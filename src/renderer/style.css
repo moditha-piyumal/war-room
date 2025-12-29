@@ -9,6 +9,41 @@ body {
     padding: 20px;
 }
 
+/****************************************************
+ * VISIBILITY TOGGLE (Step H)
+ ****************************************************/
+
+.visibility-toggle {
+    display: inline-flex;
+    gap: 4px;
+    margin: 12px 0 16px;
+}
+
+.visibility-toggle button {
+    padding: 6px 14px;
+    border-radius: 999px;
+
+    background: transparent;
+    border: 1px solid #334155;
+
+    color: #cbd5f5;
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.visibility-toggle button:hover {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.visibility-toggle button.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
 
 /* =================================================
    List Reset & Normalization

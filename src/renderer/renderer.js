@@ -24,6 +24,13 @@ let appData = {
 };
 
 /****************************************************
+ * SECTION 1.5 — VISIBILITY MODE (Step H)
+ ****************************************************/
+
+let visibilityMode = "overview";
+// "focus" | "overview" | "accomplishment"
+
+/****************************************************
  * SECTION 2 — DATA LOADING & PERSISTENCE (IPC)
  ****************************************************/
 
@@ -202,6 +209,33 @@ function isMissionEligible(missionId) {
 	return tasks.every((task) => task.isDone);
 }
 
+/****************************************************
+ * SECTION 5.5 — VISIBILITY RULES (Step H)
+ ****************************************************/
+
+function shouldRenderMission(mission) {
+	if (visibilityMode === "overview") return true;
+	if (visibilityMode === "focus") return !mission.isManuallyCompleted;
+	if (visibilityMode === "accomplishment") return mission.isManuallyCompleted;
+	return true;
+}
+
+function shouldRenderTask(task, parentMission = null) {
+	if (visibilityMode === "overview") return true;
+
+	if (visibilityMode === "focus") {
+		if (parentMission) return !parentMission.isManuallyCompleted;
+		return !task.isDone;
+	}
+
+	if (visibilityMode === "accomplishment") {
+		if (parentMission) return task.isDone;
+		return task.isDone;
+	}
+
+	return true;
+}
+
 function renderMission(mission, list) {
 	const missionLi = document.createElement("li");
 	missionLi.classList.add("mission-item");
@@ -275,6 +309,8 @@ function renderMission(mission, list) {
 	);
 
 	missionTasks.forEach((task) => {
+		if (!shouldRenderTask(task, mission)) return;
+
 		const li = document.createElement("li");
 		li.classList.add("task-item", "task-under-mission");
 
@@ -295,6 +331,8 @@ function renderStandaloneTasks(list) {
 	);
 
 	standaloneTasks.forEach((task) => {
+		if (!shouldRenderTask(task, null)) return;
+
 		const li = document.createElement("li");
 		li.classList.add("task-item");
 
@@ -321,6 +359,7 @@ function renderTasks() {
 
 	// Render missions and their tasks
 	appData.missions.forEach((mission) => {
+		if (!shouldRenderMission(mission)) return;
 		renderMission(mission, list);
 	});
 
@@ -346,6 +385,25 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Task controls
 	const taskInput = document.getElementById("task-input");
 	const taskBtn = document.getElementById("add-btn");
+
+	/****************************************************
+	 * VISIBILITY MODE CONTROLS (Step H)
+	 ****************************************************/
+
+	document.querySelectorAll(".visibility-toggle button").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			visibilityMode = btn.dataset.mode;
+
+			document
+				.querySelectorAll(".visibility-toggle button")
+				.forEach((b) => b.classList.remove("active"));
+
+			btn.classList.add("active");
+
+			console.log("[Visibility Mode] Changed to:", visibilityMode);
+			renderTasks();
+		});
+	});
 
 	taskBtn.onclick = () => {
 		const MAX_TASK_LENGTH = 40;
