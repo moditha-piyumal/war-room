@@ -204,13 +204,45 @@ function createTaskPill(task) {
 	});
 
 	// Visual state for completed task (no strike-through)
+	// Visual state for completed task (no strike-through)
 	if (task.isDone) {
 		pill.classList.add("completed");
 	}
 
+	/****************************************************
+	 * Task completion checkmark (NEW)
+	 * - This is just a visual indicator.
+	 * - Clicking the pill still toggles completion (your existing behavior).
+	 ****************************************************/
+	const taskCheckmark = document.createElement("span");
+	taskCheckmark.classList.add("task-checkmark");
+	taskCheckmark.textContent = "✓";
+
+	// Style state (lets CSS show completed vs incomplete clearly)
+	if (task.isDone) {
+		taskCheckmark.classList.add("completed");
+	} else {
+		taskCheckmark.classList.add("inactive");
+	}
+
+	/****************************************************
+	 * Right side container
+	 * - margin-left:auto pushes it to the right edge
+	 * - keeps mission pills unchanged (this is only tasks)
+	 ****************************************************/
+	const rightControls = document.createElement("div");
+	rightControls.classList.add("task-right-controls");
+
+	// Keep dropdown interactions from toggling completion (you already stopPropagation)
+	rightControls.appendChild(dropdown);
+
+	// Delete next to checkmark (order doesn't matter, but checkmark last keeps “right edge”)
+	rightControls.appendChild(deleteBtn);
+	rightControls.appendChild(taskCheckmark);
+
+	// Final structure
 	pill.appendChild(span);
-	pill.appendChild(dropdown);
-	pill.appendChild(deleteBtn);
+	pill.appendChild(rightControls);
 
 	return pill;
 }

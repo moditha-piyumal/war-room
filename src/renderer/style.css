@@ -495,3 +495,28 @@ li {
     border: 1px solid #334155;
     color: #cbd5f5;
 }
+
+.task-right-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    /* ✅ pushes checkmark to the far right edge */
+}
+
+.task-checkmark {
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1;
+    user-select: none;
+}
+
+/* Incomplete task checkmark (dim) */
+.task-checkmark.inactive {
+    opacity: 0.35;
+}
+
+/* Completed task checkmark (bright) */
+.task-checkmark.completed {
+    opacity: 1;
+}
