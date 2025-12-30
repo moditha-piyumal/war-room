@@ -23,6 +23,11 @@ let appData = {
 	settings: {},
 };
 
+// =================================================
+// X-01 Undo Delete State
+// =================================================
+let lastDeleted = null;
+
 /****************************************************
  * SECTION 1.5 — VISIBILITY MODE (Step H)
  ****************************************************/
@@ -556,7 +561,22 @@ function closeConfirmModal() {
 }
 
 function deleteTask(taskId) {
-	appData.tasks = appData.tasks.filter((t) => t.id !== taskId);
+	const taskIndex = appData.tasks.findIndex((t) => t.id === taskId);
+	if (taskIndex === -1) return;
+
+	const deletedTask = appData.tasks[taskIndex];
+
+	// Store undo info
+	lastDeleted = {
+		type: "task",
+		data: deletedTask,
+		index: taskIndex,
+	};
+
+	console.log("[UNDO] Stored deleted task:", deletedTask.title);
+
+	// Remove task
+	appData.tasks.splice(taskIndex, 1);
 
 	// Recalculate mission eligibility
 	appData.missions.forEach((mission) => {
@@ -570,28 +590,116 @@ function deleteTask(taskId) {
 
 	persist();
 	renderTasks();
+	showUndoToast();
 }
 
 function deleteMissionOnly(missionId) {
+	const missionIndex = appData.missions.findIndex((m) => m.id === missionId);
+	if (missionIndex === -1) return;
+
+	const deletedMission = appData.missions[missionIndex];
+
+	const affectedTasks = appData.tasks
+		.filter((t) => t.missionId === missionId)
+		.map((t) => ({ ...t }));
+
+	lastDeleted = {
+		type: "mission-only",
+		mission: deletedMission,
+		tasks: affectedTasks,
+		index: missionIndex,
+	};
+
+	console.log("[UNDO] Stored deleted mission (tasks preserved)");
+
+	// Remove mission
+	appData.missions.splice(missionIndex, 1);
+
+	// Detach tasks
 	appData.tasks.forEach((task) => {
 		if (task.missionId === missionId) {
 			task.missionId = null;
 		}
 	});
 
-	appData.missions = appData.missions.filter((m) => m.id !== missionId);
-
 	persist();
 	renderTasks();
+	showUndoToast();
 }
 
 function deleteMissionAndTasks(missionId) {
+	const missionIndex = appData.missions.findIndex((m) => m.id === missionId);
+	if (missionIndex === -1) return;
+
+	const deletedMission = appData.missions[missionIndex];
+	const deletedTasks = appData.tasks.filter((t) => t.missionId === missionId);
+
+	lastDeleted = {
+		type: "mission-and-tasks",
+		mission: deletedMission,
+		tasks: deletedTasks,
+		index: missionIndex,
+	};
+
+	console.log("[UNDO] Stored deleted mission + tasks");
+
+	// Remove mission
+	appData.missions.splice(missionIndex, 1);
+
+	// Remove tasks
 	appData.tasks = appData.tasks.filter((t) => t.missionId !== missionId);
-	appData.missions = appData.missions.filter((m) => m.id !== missionId);
 
 	persist();
 	renderTasks();
+	showUndoToast();
 }
+
+function undoLastDelete() {
+	if (!lastDeleted) return;
+
+	console.log("[UNDO] Restoring:", lastDeleted.type);
+
+	if (lastDeleted.type === "task") {
+		appData.tasks.splice(lastDeleted.index, 0, lastDeleted.data);
+	}
+
+	if (lastDeleted.type === "mission-only") {
+		appData.missions.splice(lastDeleted.index, 0, lastDeleted.mission);
+
+		lastDeleted.tasks.forEach((task) => {
+			const t = appData.tasks.find((x) => x.id === task.id);
+			if (t) t.missionId = lastDeleted.mission.id;
+		});
+	}
+
+	if (lastDeleted.type === "mission-and-tasks") {
+		appData.missions.splice(lastDeleted.index, 0, lastDeleted.mission);
+		appData.tasks.push(...lastDeleted.tasks);
+	}
+
+	lastDeleted = null;
+	persist();
+	renderTasks();
+}
+
+let undoTimeout = null;
+
+function showUndoToast() {
+	const toast = document.getElementById("undo-toast");
+	toast.classList.remove("hidden");
+
+	clearTimeout(undoTimeout);
+
+	undoTimeout = setTimeout(() => {
+		lastDeleted = null;
+		toast.classList.add("hidden");
+	}, 6000);
+}
+
+document.getElementById("undo-btn").onclick = () => {
+	undoLastDelete();
+	document.getElementById("undo-toast").classList.add("hidden");
+};
 
 /****************************************************
  * SECTION 7 — APPLICATION BOOTSTRAP

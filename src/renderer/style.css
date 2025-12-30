@@ -545,3 +545,31 @@ li {
 
 
 } */
+.undo-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    background: #020617;
+    color: #e5e7eb;
+    padding: 10px 14px;
+    border-radius: 8px;
+
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.undo-toast.hidden {
+    display: none;
+}
+
+.undo-toast button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-weight: 600;
+}
