@@ -1,11 +1,11 @@
 {
 	"name": "war-room",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "WAR ROOM - Offline-first mission & task command app",
 	"main": "src/main.js",
 	"scripts": {
 		"start": "electron .",
-		"clean": "rimraf dist",
+		"clean": "rimraf dist || exit 0",
 		"build": "npm run clean && electron-builder"
 	},
 	"devDependencies": {
@@ -22,7 +22,7 @@
 			"package.json"
 		],
 		"win": {
-			"icon": "src/icon.ico",
+			"icon": "src/warroomicon.ico",
 			"target": "nsis"
 		},
 		"nsis": {
