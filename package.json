@@ -4,9 +4,30 @@
 	"description": "WAR ROOM - Offline-first mission & task command app",
 	"main": "src/main.js",
 	"scripts": {
-		"start": "electron ."
+		"start": "electron .",
+		"clean": "rimraf dist",
+		"build": "npm run clean && electron-builder"
 	},
 	"devDependencies": {
-		"electron": "36.2.0"
+		"electron": "36.2.0",
+		"electron-builder": "26.0.12",
+		"rimraf": "6.0.1"
+	},
+	"build": {
+		"appId": "com.moditha.warroom",
+		"productName": "WAR_ROOM",
+		"directories": {
+			"buildResources": "src"
+		},
+		"win": {
+			"icon": "src/warroomicon.ico",
+			"target": "nsis"
+		},
+		"nsis": {
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true,
+			"createStartMenuShortcut": true
+		}
 	}
 }

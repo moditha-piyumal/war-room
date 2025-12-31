@@ -10,6 +10,10 @@ function createWindow() {
 		width: 1100,
 		height: 1000,
 		title: "WAR ROOM",
+
+		// ✅ IMPORTANT: this sets the runtime app icon (taskbar, Alt+Tab, etc.)
+		icon: path.join(__dirname, "warroomicon.ico"),
+
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 		},
