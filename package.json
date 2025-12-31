@@ -15,12 +15,14 @@
 	},
 	"build": {
 		"appId": "com.moditha.warroom",
-		"productName": "WAR_ROOM",
-		"directories": {
-			"buildResources": "src"
-		},
+		"productName": "WAR ROOM",
+		"files": [
+			"src/**/*",
+			"node_modules/**/*",
+			"package.json"
+		],
 		"win": {
-			"icon": "src/warroomicon.ico",
+			"icon": "src/icon.ico",
 			"target": "nsis"
 		},
 		"nsis": {
