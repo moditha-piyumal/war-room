@@ -53,6 +53,18 @@ async function persist() {
 	console.log("[persist] Save completed. Result:", result);
 }
 
+// =================================================
+// X-02 Render App Version
+// =================================================
+async function renderAppVersion() {
+	const version = await window.warRoomAPI.getAppVersion();
+	const el = document.getElementById("app-version");
+
+	el.textContent = `v${version}`;
+}
+
+renderAppVersion();
+
 /****************************************************
  * SECTION 3 — MISSION MUTATION LOGIC
  ****************************************************/

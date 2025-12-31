@@ -573,3 +573,16 @@ li {
     cursor: pointer;
     font-weight: 600;
 }
+
+.app-version {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+
+    font-size: 0.75rem;
+    color: #64748b;
+    opacity: 0.85;
+
+    user-select: none;
+    pointer-events: none;
+}

@@ -29,6 +29,13 @@ ipcMain.handle("save-data", (_event, data) => {
 	return true;
 });
 
+// =================================================
+// X-02 App Version IPC
+// =================================================
+ipcMain.handle("get-app-version", () => {
+	return app.getVersion();
+});
+
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
