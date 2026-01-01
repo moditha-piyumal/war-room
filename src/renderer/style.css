@@ -586,3 +586,52 @@ li {
     user-select: none;
     pointer-events: none;
 }
+
+/* ===============================
+   Data & Backup Tools Section
+   =============================== */
+
+#data-tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* space for future buttons */
+
+    margin-top: 18px;
+    padding-bottom: 148px;
+    /* space for signature banner */
+
+    /* keeps it visually separate but calm */
+}
+
+/* Data tool buttons */
+
+#open-data-folder-btn {
+    background: #1f4fd8;
+    /* stronger blue than pills */
+    color: #ffffff;
+
+    border: none;
+    border-radius: 999px;
+    /* pill shape */
+
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#open-data-folder-btn:hover {
+    background: #2a5fff;
+}
+
+#open-data-folder-btn:active {
+    transform: scale(0.97);
+}
