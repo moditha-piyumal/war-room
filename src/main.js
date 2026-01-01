@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
 
 const path = require("path");
 const { readData, writeData } = require("./storage/jsonStore");
@@ -41,6 +41,12 @@ ipcMain.handle("get-app-version", () => {
 });
 
 app.whenReady().then(createWindow);
+
+ipcMain.handle("open-user-data-folder", async () => {
+	const userDataPath = app.getPath("userData");
+	console.log("[Main] Opening userData folder:", userDataPath);
+	await shell.openPath(userDataPath);
+});
 
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {

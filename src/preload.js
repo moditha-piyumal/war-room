@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld("warRoomAPI", {
 	getData: () => ipcRenderer.invoke("get-data"),
 	saveData: (data) => ipcRenderer.invoke("save-data", data),
 	getAppVersion: () => ipcRenderer.invoke("get-app-version"),
+	openDataFolder: () => ipcRenderer.invoke("open-user-data-folder"),
 });

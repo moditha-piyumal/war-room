@@ -65,6 +65,13 @@ async function renderAppVersion() {
 
 renderAppVersion();
 
+const openDataFolderBtn = document.getElementById("open-data-folder-btn");
+
+openDataFolderBtn.addEventListener("click", () => {
+	console.log("[UI] Open Data Folder clicked");
+	window.warRoomAPI.openDataFolder();
+});
+
 /****************************************************
  * SECTION 3 — MISSION MUTATION LOGIC
  ****************************************************/
