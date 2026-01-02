@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 
 const path = require("path");
+const fs = require("fs");
 const { readData, writeData } = require("./storage/jsonStore");
 
 let mainWindow;
@@ -31,6 +32,43 @@ ipcMain.handle("get-data", () => {
 ipcMain.handle("save-data", (_event, data) => {
 	writeData(data);
 	return true;
+});
+
+ipcMain.handle("create-backup", async () => {
+	try {
+		const userDataPath = app.getPath("userData");
+		const dataFilePath = path.join(userDataPath, "data.json");
+		const backupsDir = path.join(userDataPath, "backups");
+
+		console.log("[Backup] userData path:", userDataPath);
+
+		// Ensure backups directory exists
+		if (!fs.existsSync(backupsDir)) {
+			fs.mkdirSync(backupsDir, { recursive: true });
+			console.log("[Backup] Created backups directory");
+		}
+
+		// Timestamp for filename
+		const now = new Date();
+		const timestamp = now
+			.toISOString()
+			.replace(/T/, "-")
+			.replace(/:/g, "-")
+			.split(".")[0];
+
+		const backupFileName = `backup-${timestamp}.json`;
+		const backupFilePath = path.join(backupsDir, backupFileName);
+
+		// Copy data.json → backup file
+		fs.copyFileSync(dataFilePath, backupFilePath);
+
+		console.log("[Backup] Backup created:", backupFilePath);
+
+		return { success: true, file: backupFileName };
+	} catch (err) {
+		console.error("[Backup] Failed to create backup:", err);
+		return { success: false, error: err.message };
+	}
 });
 
 // =================================================

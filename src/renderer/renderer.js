@@ -72,6 +72,20 @@ openDataFolderBtn.addEventListener("click", () => {
 	window.warRoomAPI.openDataFolder();
 });
 
+const createBackupBtn = document.getElementById("create-backup-btn");
+
+createBackupBtn.addEventListener("click", async () => {
+	console.log("[UI] Create Backup clicked");
+
+	const result = await window.warRoomAPI.createBackup();
+
+	if (result.success) {
+		console.log("[UI] Backup successful:", result.file);
+	} else {
+		console.error("[UI] Backup failed:", result.error);
+	}
+});
+
 /****************************************************
  * SECTION 3 — MISSION MUTATION LOGIC
  ****************************************************/

@@ -606,32 +606,25 @@ li {
 
 /* Data tool buttons */
 
-#open-data-folder-btn {
+#data-tools button {
     background: #1f4fd8;
-    /* stronger blue than pills */
     color: #ffffff;
-
     border: none;
     border-radius: 999px;
-    /* pill shape */
-
     padding: 10px 18px;
     font-size: 14px;
     font-weight: 500;
-
     cursor: pointer;
-
     display: inline-flex;
     align-items: center;
     gap: 6px;
-
     transition: background 0.2s ease, transform 0.1s ease;
 }
 
-#open-data-folder-btn:hover {
+#data-tools button:hover {
     background: #2a5fff;
 }
 
-#open-data-folder-btn:active {
+#data-tools button:active {
     transform: scale(0.97);
 }
