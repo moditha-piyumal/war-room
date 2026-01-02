@@ -1,10 +1,5 @@
 {
 	"files.exclude": {
 		"**/dist": true
-	},
-	"workbench.colorCustomizations": {
-		"activityBar.background": "#302F0E",
-		"titleBar.activeBackground": "#434113",
-		"titleBar.activeForeground": "#FBFAF0"
 	}
 }
